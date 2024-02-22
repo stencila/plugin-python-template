@@ -1,6 +1,8 @@
 name = "python-example"
 version = "0.1.0"
-description = "An example Stencila plugin written in Python"
+description = "Example of a plugin written in Python"
 home = "https://github.com/stencila/plugin-example-python"
 install = "https://github.com/stencila/plugin-example-python"
 runtime = "python>=3.9"
+transports = ["stdio", "http"]
+command = "python ..."
