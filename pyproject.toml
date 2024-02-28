@@ -28,10 +28,11 @@ include = ["src", "tests"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 
-[tool.ruff]
+[tool.ruff.lint]
 select = [
   'F',   # pyflakes
   'E',   # codestyle
+  'D',   # docstyle
   'W',   # warning
   'N',   # pep-naming
   'UP',  # upgrade
@@ -57,11 +58,22 @@ select = [
 
 # deprecated
 ignore = [
+  'C408',   # Unnecessary dict call - I prefer the clarity of the dict call
+  'A002',
+  'RET504', # Unnecessary return statement. I prefer these for clarity.
+  'D105',   # Missing docstring in magic method
   'ANN101', # Missing type annotation for self
   'ANN102', # Missing type annotation for classmethod
   'ANN204', # Missing type annotation for specical function
   'ANN201', # Missing return type annotation
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google" # Accepts: "google", "numpy", or "pep257".
+
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ['PLR', 'D']
 
 [build-system]
 requires = ["poetry-core"]
