@@ -8,4 +8,4 @@ transports = ["stdio", "http"]
 command = "run_plugin"
 
 [[kernels]]
-name = "Example"
+name = "ExampleKernel"

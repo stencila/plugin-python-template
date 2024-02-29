@@ -11,7 +11,8 @@ from typing import TYPE_CHECKING, Optional
 import aiohttp
 from aiohttp import web
 
-from plugin_example_python.plugin_base import JSONDict, ParamsType
+# TODO: Remove this dependency?
+from plugin_example_python.plugin import JSONDict
 
 if TYPE_CHECKING:
     from asyncio.subprocess import Process
@@ -49,7 +50,7 @@ class Harness(ABC):
         self.next_id = 1
 
     @abstractmethod
-    async def send_raw(self, payload: JSONDict) -> JSONDict:
+    async def send_raw(self, payload: JSONDict) -> JSONDict | list[JSONDict]:
         """Make a raw request to the plugin (for testing)."""
         ...
 
@@ -57,7 +58,7 @@ class Harness(ABC):
         self,
         method: str,
         **kwargs,  # noqa: ANN003
-    ) -> JSONDict:
+    ) -> JSONDict | list[JSONDict]:
         """Make an RPC request to the plugin.
 
         Args:
@@ -240,3 +241,25 @@ class HttpHarness(Harness):
             self.process.terminate()
             await self.process.wait()
             self.process = None
+
+
+try:
+    # WIP: This is not working yet.
+    import pytest
+
+    @pytest.fixture()
+    async def stdio_harness(plugin_path: Path):
+        async with StdioHarness(plugin_path) as harness:
+            yield harness
+
+    @pytest.fixture()
+    async def http_harness(plugin_path: Path):
+        async with HttpHarness(plugin_path) as harness:
+            yield harness
+
+    @pytest.fixture(params=["stdio_harness", "http_harness"])
+    def harness(request):  # noqa: ANN001
+        return request.getfixturevalue(request.param)
+
+except ImportError:
+    pass

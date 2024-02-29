@@ -1,4 +1,9 @@
-"""Some very minimal Stencila Types, just to get us going."""
+"""Some very minimal Stencila Types, just to get us going.
+
+In the future, this will be separate package to install.
+
+TODO: Many types are missing.
+"""
 from dataclasses import dataclass
 from typing import Any, Literal, TypeAlias
 

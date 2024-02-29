@@ -11,6 +11,7 @@ from .stencila_types import (
 KernelId: TypeAlias = str
 KernelName: TypeAlias = str
 
+
 class Kernel:
     def __init__(self, ident: KernelId):
         self.ident = ident
@@ -24,7 +25,6 @@ class Kernel:
     async def get_info(self) -> SoftwareApplication:
         return SoftwareApplication(
             name=self.__class__.__name__,
-
         )
 
     async def get_packages(self) -> list[SoftwareSourceCode]:

@@ -1,10 +1,9 @@
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-import plugin_example_python as plug
+import plugin_example_python
 import pytest
-from plugin_example_python.plugin import ExamplePlugin
 from plugin_example_python import stencila_types as T
+from plugin_example_python.plugin import Plugin
 from plugin_example_python.testing import (
     Harness,
     HttpHarness,
@@ -13,13 +12,10 @@ from plugin_example_python.testing import (
     StdioHarness,
 )
 
-if TYPE_CHECKING:
-    from plugin_example_python.kernel import KernelId
-
 
 @pytest.fixture()
 def plugin_path():
-    path = Path(plug.__file__).parent / "plugin.py"
+    path = Path(plugin_example_python.__file__).parent / "example.py"
     assert path.exists()
     return path
 
@@ -46,9 +42,9 @@ def test_plugin_path_exists(plugin_path: Path):
 
 
 async def test_direct_method_not_found():
-    from plugin_example_python.plugin_base import ErrorCodes, _handle_json
+    from plugin_example_python.plugin import ErrorCodes, _handle_json
 
-    plugin = ExamplePlugin()
+    plugin = Plugin()
     request_json = {
         "jsonrpc": "2.0",
         "id": "test",
@@ -81,14 +77,15 @@ async def test_bad_json(harness: Harness):
 
 
 async def test_kernel(harness: Harness):
-    result = await harness.send_rpc("kernel_start", kernel="Example")
+    # WIP
+    result = await harness.send_rpc("kernel_start", kernel="ExampleKernel")
+    assert result is not None
     ki = T.KernelInstance(**result)
-    print(ki)
 
     result = await harness.send_rpc("kernel_info", instance=ki.instance)
 
     # Will throw if it cannot reconstruct it.
-    sa = T.SoftwareApplication(**result)
+    T.SoftwareApplication(**result)
 
-    # result = await harness.send_rpc("kernel_packages", instance=instance.ident)
-    # assert result == []
+    result = await harness.send_rpc("kernel_packages", instance=ki.instance)
+    [T.SoftwareSourceCode(**dct) for dct in result]

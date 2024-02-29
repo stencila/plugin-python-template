@@ -7,7 +7,7 @@ license = "Apache"
 readme = "README.md"
 
 [tool.poetry.scripts]
-run_plugin = "plugin_example_python.plugin:run"
+run_plugin = "plugin_example_python.example:run"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
