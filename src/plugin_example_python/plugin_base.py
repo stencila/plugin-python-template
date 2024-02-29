@@ -7,18 +7,28 @@ import json
 import os
 import sys
 import time
+import uuid
+from typing import Any
 
-# from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Union
-
+import cattrs
 from aiohttp import web
 
+from .kernel import Kernel, KernelId, KernelName
+from .stencila_types import (
+    ExecutionMessage,
+    KernelInstance,
+    SoftwareApplication,
+    SoftwareSourceCode,
+)
+
 # This is the best we can do with 3.9.
+# TODO: Fix this. It should be JSONABLE = Union[bool, int, float, str, list, dict, None]
 JSONDict = dict[str, Any]
-IdType = Union[str, int, None]
-ParamsType = Union[List, Dict, None]
+IdType = str | int | None
+ParamsType = list | dict | None
 
 
+# TODO: Make into IntEnum?
 class ErrorCodes:
     """JSON-RPC error codes.
 
@@ -51,6 +61,10 @@ def _error(id: IdType, code: int, message: str) -> JSONDict:
 class PluginBase:
     """Base class for Stencila plugins."""
 
+    def __init__(self):
+        self.kernels: dict[KernelName, type[Kernel]] = {}
+        self.kernel_instances: dict[KernelId, Kernel] = {}
+
     async def health(self) -> JSONDict:
         """Minimal check that the plugin runs."""
         return {
@@ -58,65 +72,67 @@ class PluginBase:
             "status": "OK",
         }
 
-    async def _handle_json(self, request: JSONDict) -> JSONDict:
-        """Interpret a JSON-RPC request and return a response.
+    async def kernel_start(self, kernel: KernelName):
+        kernel_cls = self.kernels.get(kernel)
+        if kernel_cls is None:
+            return None
 
-        See https://www.jsonrpc.org/specification
-        """
-        rpc_version = request.get("jsonrpc")
-        if rpc_version != "2.0":
-            return _error(
-                None, ErrorCodes.INVALID_REQUEST, "Invalid or missing JSON-RPC version"
-            )
+        uid = uuid.uuid4()
+        kernel_id = f"{kernel}-{uid}"
+        self.kernel_instances[kernel_id] = kernel_cls(kernel_id)
 
-        method = request.get("method")
-        if method is None:
-            return _error(None, ErrorCodes.METHOD_NOT_FOUND, "No method sent")
+        return KernelInstance(kernel_id)
 
-        # This can be None
-        id: IdType = request.get("id")  # noqa: A001
+    async def kernel_stop(self, instance: KernelId):
+        kernel = self.kernel_instances.pop(instance, None)
+        if kernel:
+            await kernel.on_stop()
 
-        # According to the standard, the params can be an Array or an Object (a dict).
-        # We also handle None.
-        params = request.get("params")
+    async def kernel_info(self, instance: KernelId) -> SoftwareApplication | None:
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.get_info()
+        return None
 
-        return await self._handle_rpc(method, params=params, id=id)
+    async def kernel_packages(self, instance: str) -> list[SoftwareSourceCode]:
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.get_packages()
+        return []
 
-    async def _handle_rpc(
-        self,
-        method: str,
-        *,
-        params: Optional[Union[List, Dict]] = None,
-        id: IdType = None,
-    ) -> JSONDict:
-        """Forward the RPC request to a method and return the result."""
-        if params is None:
-            args = []
-            kwargs = {}
-        elif isinstance(params, List):
-            # Note: Stencila should send named parameters.
-            # This is here for completeness.
-            args = params
-            kwargs = {}
-        elif isinstance(params, Dict):
-            args = []
-            kwargs = params
-        else:
-            return _error(
-                id, ErrorCodes.INVALID_PARAMS, "Params are not Array or Object"
-            )
+    async def kernel_execute(self, code: str, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.execute(code)
+        return [], [ExecutionMessage(message="Kernel not found", level="Error")]
 
-        func = getattr(self, method, None)
-        if callable(func):
-            try:
-                result = await func(*args, **kwargs)
-                return _success(id, result)
-            except Exception as e:
-                return _error(id, ErrorCodes.INTERNAL_ERROR, f"Internal error: {e}")
-        else:
-            return _error(
-                id, ErrorCodes.METHOD_NOT_FOUND, f"Method `{method}` not found"
-            )
+    async def kernel_evaluate(self, code: str, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.evaluate(code)
+        return [], [ExecutionMessage(message="Kernel not found", level="Error")]
+
+    async def kernel_list(self, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.list_variables()
+        return []
+
+    async def kernel_get(self, name: str, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            return await kernel.get_variable(name)
+        return None
+
+    async def kernel_set(self, name: str, value: Any, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            await kernel.set_variable(name, value)
+
+    async def kernel_remove(self, name: str, instance: str):
+        kernel = self.kernel_instances.get(instance)
+        if kernel:
+            await kernel.remove_variable(name)
 
     async def run(self) -> None:
         """Invoke the plugin.
@@ -132,6 +148,81 @@ class PluginBase:
             await _listen_http(self, port, token)
         else:
             raise RuntimeError(f"Unknown protocol: {protocol}")
+
+
+async def _handle_json(
+    plugin: PluginBase,
+    request: JSONDict,
+) -> JSONDict:
+    """Interpret a JSON-RPC request and return a response.
+
+    See https://www.jsonrpc.org/specification
+    """
+    rpc_version = request.get("jsonrpc")
+    if rpc_version != "2.0":
+        return _error(
+            None, ErrorCodes.INVALID_REQUEST, "Invalid or missing JSON-RPC version"
+        )
+
+    method = request.get("method")
+    if method is None:
+        return _error(None, ErrorCodes.METHOD_NOT_FOUND, "No method sent")
+
+    # This can be None
+    id: IdType = request.get("id")  # noqa: A001
+
+    # According to the standard, the params can be an Array or an Object (a dict).
+    # We also handle None.
+    params = request.get("params")
+
+    return await _handle_rpc(plugin, method, params=params, id=id)
+
+
+def _make_jsonable(result: Any):
+    if isinstance(result, (bool, int, float, str)):
+        return result
+
+    dct = cattrs.unstructure(result)
+    return dct
+
+
+async def _handle_rpc(
+    plugin: PluginBase,
+    method: str,
+    *,
+    params: ParamsType,
+    id: IdType = None,
+) -> JSONDict:
+    """Forward the RPC request to a method and return the result."""
+    if params is None:
+        args = []
+        kwargs = {}
+    elif isinstance(params, list):
+        # Note: Stencila should send named parameters.
+        # This is here for completeness.
+        args = params
+        kwargs = {}
+    elif isinstance(params, dict):
+        args = []
+        kwargs = params
+    else:
+        return _error(id, ErrorCodes.INVALID_PARAMS, "Params are not Array or Object")
+
+    func = getattr(plugin, method, None)
+    if callable(func):
+        try:
+            result = await func(*args, **kwargs)
+            try:
+                dct_result = _make_jsonable(result)
+            except Exception as e:
+                return _error(
+                    id, ErrorCodes.INTERNAL_ERROR, f"Cannot convert result to JSON {e}"
+                )
+            return _success(id, dct_result)
+        except Exception as e:
+            return _error(id, ErrorCodes.INTERNAL_ERROR, f"Internal error: {e}")
+    else:
+        return _error(id, ErrorCodes.METHOD_NOT_FOUND, f"Method `{method}` not found")
 
 
 async def _listen_stdio(plugin: PluginBase) -> None:
@@ -163,7 +254,7 @@ async def _listen_stdio(plugin: PluginBase) -> None:
         except (json.JSONDecodeError, UnicodeDecodeError):
             resp = _error(None, ErrorCodes.PARSE_ERROR, "Parse error")
         else:
-            resp = await plugin._handle_json(request)
+            resp = await _handle_json(plugin, request)
 
         writer.write(json.dumps(resp).encode())
         writer.write(b"\n")
@@ -190,7 +281,7 @@ async def _listen_http(plugin: PluginBase, port: int, token: str) -> None:
         except json.JSONDecodeError:
             resp = _error(None, ErrorCodes.PARSE_ERROR, "Cannot parse JSON")
         else:
-            resp = await plugin._handle_json(req_json)
+            resp = await _handle_json(plugin, req_json)
 
         return web.Response(text=json.dumps(resp), content_type="application/json")
 

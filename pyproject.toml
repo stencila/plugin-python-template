@@ -10,8 +10,9 @@ readme = "README.md"
 run_plugin = "plugin_example_python.plugin:run"
 
 [tool.poetry.dependencies]
-python = ">3.9"
+python = ">=3.10"
 aiohttp = "^3.9.3"
+cattrs = "^23.2.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
@@ -22,7 +23,7 @@ pytest-asyncio = "^0.23.5"
 # See the poetry.toml file.
 venvPath = "."
 venv = ".venv"
-pythonVersion = "3.9"
+pythonVersion = "3.10"
 include = ["src", "tests"]
 
 [tool.pytest.ini_options]
@@ -30,9 +31,9 @@ asyncio_mode = "auto"
 
 [tool.ruff.lint]
 select = [
-  'F',   # pyflakes
-  'E',   # codestyle
-  'D',   # docstyle
+  'F', # pyflakes
+  'E', # codestyle
+  # 'D',   # docstyle
   'W',   # warning
   'N',   # pep-naming
   'UP',  # upgrade
@@ -54,9 +55,9 @@ select = [
   'PTH', # pathlib
   'RUF', # ruff
   'LOG', # logging
+  'PYI', # python hints?
 ]
 
-# deprecated
 ignore = [
   'C408',   # Unnecessary dict call - I prefer the clarity of the dict call
   'A002',
@@ -73,6 +74,7 @@ convention = "google" # Accepts: "google", "numpy", or "pep257".
 
 
 [tool.ruff.lint.per-file-ignores]
+# Care less about docs and code in tests.
 "tests/**/*.py" = ['PLR', 'D']
 
 [build-system]

@@ -32,12 +32,12 @@ def _generate_random_token() -> str:
     return token
 
 
-class TestHttpError(Exception):
+class HttpTestingError(Exception):
     """HTTP errors when testing."""
 
 
 # TODO: Actually put the codes in here.
-class TestRPCError(Exception):
+class RPCTestingError(Exception):
     """RPC Errors during testing."""
 
 
@@ -56,8 +56,7 @@ class Harness(ABC):
     async def send_rpc(
         self,
         method: str,
-        *,
-        params: ParamsType = None,
+        **kwargs,  # noqa: ANN003
     ) -> JSONDict:
         """Make an RPC request to the plugin.
 
@@ -68,11 +67,10 @@ class Harness(ABC):
         Returns:
             JSONDict: The result of the RPC call (if successful).
         """
-        params = {} if params is None else params
         payload = {
             "jsonrpc": "2.0",
             "method": method,
-            "params": params,
+            "params": kwargs,
             "id": self.next_id,
         }
         self.next_id += 1
@@ -80,9 +78,9 @@ class Harness(ABC):
 
     def _process_response(self, response: JSONDict, payload: JSONDict) -> JSONDict:
         if "error" in response:
-            raise TestRPCError(response["error"]["message"])
+            raise RPCTestingError(response["error"]["message"])
         if response["id"] != payload["id"]:
-            raise TestRPCError("Response ID does not match request ID")
+            raise RPCTestingError("Response ID does not match request ID")
         return response["result"]
 
 
@@ -222,7 +220,7 @@ class HttpHarness(Harness):
             self.base_url, json=payload, headers=self.headers
         ) as response:
             if response.status != web.HTTPOk.status_code:
-                raise TestHttpError(
+                raise HttpTestingError(
                     f"Request failed with status code {response.status}"
                 )
             resp = await response.json()

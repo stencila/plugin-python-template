@@ -6,3 +6,6 @@ install = "git+https://github.com/stencila/plugin-example-python"
 runtime = "python>=3.9"
 transports = ["stdio", "http"]
 command = "run_plugin"
+
+[[kernels]]
+name = "Example"
