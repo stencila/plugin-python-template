@@ -8,4 +8,7 @@ transports = ["stdio", "http"]
 command = "run_plugin"
 
 [[kernels]]
-name = "ExampleKernel"
+name = "AnimalListKernel"
+
+[[kernels]]
+name = "CapitalKernel"

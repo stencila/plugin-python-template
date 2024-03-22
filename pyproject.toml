@@ -7,12 +7,12 @@ license = "Apache"
 readme = "README.md"
 
 [tool.poetry.scripts]
-run_plugin = "plugin_example_python.example:run"
+run_plugin = "plugin_example_python.plugin:run"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
-aiohttp = "^3.9.3"
-cattrs = "^23.2.3"
+coolname = "^2.2.0"
+stencila-plugin = "^2.0.0a26"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
@@ -67,11 +67,11 @@ ignore = [
   'ANN102', # Missing type annotation for classmethod
   'ANN204', # Missing type annotation for specical function
   'ANN201', # Missing return type annotation
+  'N812',
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google" # Accepts: "google", "numpy", or "pep257".
-
 
 [tool.ruff.lint.per-file-ignores]
 # Care less about docs and code in tests.
