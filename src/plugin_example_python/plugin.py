@@ -6,7 +6,11 @@ from stencila_types import shortcuts as S
 from stencila_types import types as T
 
 
-class AnimalListKernel(Kernel):
+class AnimalsKernel(Kernel):
+    @classmethod
+    def get_name(cls) -> str:
+        return "animals"
+
     async def execute(self, code: str) -> tuple[list[T.Node], list[T.ExecutionMessage]]:
         """Generate some names.
 
@@ -28,7 +32,11 @@ class AnimalListKernel(Kernel):
         return [lst], []
 
 
-class CapitalKernel(Kernel):
+class CapitalsKernel(Kernel):
+    @classmethod
+    def get_name(cls) -> str:
+        return "capitals"
+
     async def execute(self, code: str) -> tuple[list[T.Node], list[T.ExecutionMessage]]:
         """Capitalize the input."""
         return [S.p(code.upper())], []
@@ -36,7 +44,7 @@ class CapitalKernel(Kernel):
 
 def run():
     """Expose this, as we use it as an entry point in pyproject.toml."""
-    plugin = Plugin(kernels=[AnimalListKernel, CapitalKernel])
+    plugin = Plugin(kernels=[AnimalsKernel, CapitalsKernel])
     asyncio.run(plugin.run())
 
 

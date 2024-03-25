@@ -8,7 +8,7 @@ transports = ["stdio", "http"]
 command = "run_plugin"
 
 [[kernels]]
-name = "AnimalListKernel"
+name = "animals"
 
 [[kernels]]
-name = "CapitalKernel"
+name = "capitals"
