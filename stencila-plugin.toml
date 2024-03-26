@@ -1,14 +1,14 @@
-name = "python-example"
+name = "python-template"
 version = "0.1.0"
-description = "Example of a plugin written in Python"
-home = "https://github.com/stencila/plugin-example-python"
-install = "git+https://github.com/stencila/plugin-example-python"
-runtime = "python>=3.9"
+description = "Template for Stencila plugin written in Python"
+home = "https://github.com/stencila/plugin-python-template"
+install = "git+https://github.com/stencila/plugin-python-template"
+runtime = "python>=3.10"
 transports = ["stdio", "http"]
+
+# This should be an entry point defined in pyproject.toml.
 command = "run_plugin"
 
 [[kernels]]
-name = "animals"
-
-[[kernels]]
-name = "capitals"
+# This should be the name that is return by "get_name" in the Kernel class.
+name = "echo-python"

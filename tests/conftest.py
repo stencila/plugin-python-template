@@ -1,15 +1,14 @@
 from pathlib import Path
 
+import plugin_python_template
 import pytest
-
 from stencila_plugin.testing import HttpHarness, StdioHarness
-import plugin_example_python
 
 
 @pytest.fixture()
 def plugin_path():
     """Provide the path to the plugin."""
-    path = Path(plugin_example_python.__file__).parent / "plugin.py"
+    path = Path(plugin_python_template.__file__).parent / "plugin.py"
     assert path.exists()
     return path
 
@@ -27,6 +26,6 @@ async def http_harness(plugin_path: Path):
 
 
 @pytest.fixture(params=["stdio_harness", "http_harness"])
-def harness(request):
+def harness(request):  # noqa: ANN001
     """Roll up both harnesses together."""
     return request.getfixturevalue(request.param)
