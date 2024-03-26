@@ -56,6 +56,9 @@ class EchoKernel(Kernel):
         nodes. To make it easier to work with, we import the
         `stencila_types.shortcuts as S`
         """
+        # Instead of this...
+        # nodes = [T.Paragraph(content=[T.Text(value=code)])]
+        # ... we can do this:
         nodes = [S.p(code)]
         messages = [
             T.ExecutionMessage(message="Echoing back", level=T.MessageLevel.Info)

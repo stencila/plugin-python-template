@@ -531,13 +531,13 @@ testing-integration = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "jar
 
 [[package]]
 name = "stencila-plugin"
-version = "2.0.0a28"
+version = "2.0.0a29"
 description = "Library for building Stencila Plugins"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "stencila_plugin-2.0.0a28-py3-none-any.whl", hash = "sha256:4fe2c15a88ef724b03d79293b6e85dbcd3828ccf80a5b1af2fe3ff572c3a3525"},
-    {file = "stencila_plugin-2.0.0a28.tar.gz", hash = "sha256:940add419f055bfb7923659524238f6e9a27c285982398e532d3be3d7c93ac11"},
+    {file = "stencila_plugin-2.0.0a29-py3-none-any.whl", hash = "sha256:91ee4f859f326e9f8d13ac6f54c51a7091a443e0e6d5bddbef85da63a447f3ab"},
+    {file = "stencila_plugin-2.0.0a29.tar.gz", hash = "sha256:dd22ea02eb00611445e42fa135f37726e569e8cec0d4c52ea8bc7169e9b477e2"},
 ]
 
 [package.dependencies]
@@ -704,4 +704,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10"
-content-hash = "b0f9965ab795cc661fdd5fd0863cc390515d33cf44ec4b0277dccf6d681536b4"
+content-hash = "af01b396e4abad77e266cac726c67dd0181c93223bd73a825b1765bab745ecea"

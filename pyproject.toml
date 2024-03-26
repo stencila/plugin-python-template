@@ -11,7 +11,7 @@ run_plugin = "plugin_python_template.plugin:run"
 
 [tool.poetry.dependencies]
 python = ">=3.10"
-stencila-plugin = "^2.0.0a28"
+stencila-plugin = "2.0.0a29"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
