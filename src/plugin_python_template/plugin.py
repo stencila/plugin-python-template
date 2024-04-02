@@ -1,9 +1,17 @@
 import asyncio
-from typing import Sequence
+from collections.abc import Sequence
 
-from stencila_plugin import Kernel, Plugin
+from stencila_plugin import (
+    Assistant,
+    GenerateOptions,
+    GenerateOutput,
+    GenerateTask,
+    Kernel,
+    Plugin,
+)
 from stencila_types import shortcuts as S
 from stencila_types import types as T
+from stencila_types.utilities import to_json
 
 
 class EchoKernel(Kernel):
@@ -66,6 +74,60 @@ class EchoKernel(Kernel):
         return nodes, messages
 
 
+TEMPLATE = """
+You are an assistant that echos back the task given to you.
+
+This system prompt is a template which is rendered against the
+task itself. Here are some of the parts of the task rendered into
+the system prompt:
+
+Instruction:
+
+{{ instruction | to_yaml }}
+
+Instruction text:
+
+{{ instruction_text }}
+
+Instruction content formatted:
+
+{{ content_formatted if content_formatted else "none" }}
+
+Document context:
+
+{{ context | to_yaml }}
+"""
+
+
+class EchoAssistant(Assistant):
+    """
+    A very simple assistant that just echos back the task given to it.
+    We let stencila render a template for the system.
+    """
+
+    @classmethod
+    def get_name(cls) -> str:
+        return "stencila/echo-python"
+
+    async def system_prompt(
+        self, task: GenerateTask, options: GenerateOptions
+    ) -> str | None:
+        return TEMPLATE
+
+    async def perform_task(
+        self, task: GenerateTask, options: GenerateOptions
+    ) -> GenerateOutput:
+        task_json = to_json(task)
+        return GenerateOutput(
+            nodes=[
+                S.h1("Task"),
+                S.cb(task_json, lang="json"),
+                S.h2("System Prompt"),
+                S.cb(task.system_prompt or "", lang="markdown"),
+            ]
+        )
+
+
 def run():
     """
     Expose this, as we use it as an entry point in pyproject.toml.
@@ -73,7 +135,7 @@ def run():
     We're using poetry to manage this project, and so you'll find this
     in the `tool.poetry.scripts` section in the `pyproject.toml` file.
     """
-    plugin = Plugin(kernels=[EchoKernel])
+    plugin = Plugin(kernels=[EchoKernel], assistants=[EchoAssistant])
     asyncio.run(plugin.run())
 
 

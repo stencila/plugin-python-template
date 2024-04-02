@@ -12,3 +12,9 @@ command = "run_plugin"
 [[kernels]]
 # This should be the name that is return by "get_name" in the Kernel class.
 name = "echo-python"
+
+[[assistants]]
+name = "stencila/echo-python"
+title = "Python Echo Assistant"
+content-format = "markdown"
+system-prompt = true
