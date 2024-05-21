@@ -1,3 +1,4 @@
+# from stencila_plugin import structure, unstructure
 from stencila_plugin import GenerateOutput, GenerateTask, structure, unstructure
 from stencila_plugin.kernel import KernelInstance
 from stencila_plugin.testing import Harness
