@@ -18,3 +18,4 @@ name = "stencila/echo-python"
 title = "Python Echo Assistant"
 content-format = "markdown"
 system-prompt = true
+delegates = false
