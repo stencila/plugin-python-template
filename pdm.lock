@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:68054b208df7b462d1bb8fd0b86e70bc85cc4751672d1745b1e33fa1af23ae81"
+content_hash = "sha256:8b0819e8e8a95517c727b9d75989dca9c16930a2dbe592364b16dc7f9e57939a"
 
 [[package]]
 name = "aiohttp"
@@ -294,16 +294,13 @@ files = [
 
 [[package]]
 name = "nodeenv"
-version = "1.8.0"
-requires_python = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*"
+version = "1.9.0"
+requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Node.js virtual environment builder"
 groups = ["dev"]
-dependencies = [
-    "setuptools",
-]
 files = [
-    {file = "nodeenv-1.8.0-py2.py3-none-any.whl", hash = "sha256:df865724bb3c3adc86b3876fa209771517b0cfe596beff01a92700e0e8be4cec"},
-    {file = "nodeenv-1.8.0.tar.gz", hash = "sha256:d51e0c37e64fbf47d017feac3145cdbb58836d7eee8c6f6d3b6880c5456227d2"},
+    {file = "nodeenv-1.9.0-py2.py3-none-any.whl", hash = "sha256:508ecec98f9f3330b636d4448c0f1a56fc68017c68f1e7857ebc52acf0eb879a"},
+    {file = "nodeenv-1.9.0.tar.gz", hash = "sha256:07f144e90dae547bf0d4ee8da0ee42664a42a04e02ed68e06324348dafe4bdb1"},
 ]
 
 [[package]]
@@ -330,7 +327,7 @@ files = [
 
 [[package]]
 name = "pyright"
-version = "1.1.363"
+version = "1.1.365"
 requires_python = ">=3.7"
 summary = "Command line wrapper for pyright"
 groups = ["dev"]
@@ -338,8 +335,8 @@ dependencies = [
     "nodeenv>=1.6.0",
 ]
 files = [
-    {file = "pyright-1.1.363-py3-none-any.whl", hash = "sha256:d3b8d73c8d230e26cc3523862f3398032a0c39a00d7bb69dc0f595f8e888fd01"},
-    {file = "pyright-1.1.363.tar.gz", hash = "sha256:00a8f0ae0e339473bb0488f8a2a2dcdf574e94a16cd7b4390d49d144714d8db2"},
+    {file = "pyright-1.1.365-py3-none-any.whl", hash = "sha256:194d767a039f9034376b7ec8423841880ac6efdd061f3e283b4ad9fcd484a659"},
+    {file = "pyright-1.1.365.tar.gz", hash = "sha256:d7e69000939aed4bf823707086c30c84c005bdd39fac2dfb370f0e5be16c2ef2"},
 ]
 
 [[package]]
@@ -376,34 +373,23 @@ files = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "69.5.1"
-requires_python = ">=3.8"
-summary = "Easily download, build, install, upgrade, and uninstall Python packages"
-groups = ["dev"]
-files = [
-    {file = "setuptools-69.5.1-py3-none-any.whl", hash = "sha256:c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32"},
-    {file = "setuptools-69.5.1.tar.gz", hash = "sha256:6c1fccdac05a97e598fb0ae3bbed5904ccb317337a51139dcd51453611bbb987"},
-]
-
-[[package]]
 name = "stencila-plugin"
-version = "2.0.0a33"
+version = "2.0.0a34"
 requires_python = ">=3.10"
 summary = "Library for building Stencila Plugins"
 groups = ["default"]
 dependencies = [
     "aiohttp>=3.9.3",
-    "stencila-types==2.0.0a30",
+    "stencila-types==2.0.0a31",
 ]
 files = [
-    {file = "stencila_plugin-2.0.0a33-py3-none-any.whl", hash = "sha256:206e062d0c7d44196d42ae32c490243d0d24c78e157e23946a7cbc75c0b11398"},
-    {file = "stencila_plugin-2.0.0a33.tar.gz", hash = "sha256:2854f83d8230c5b20b19bf41c80f1b65c6cb09dae243a46f0229bf4a8c1fd6e1"},
+    {file = "stencila_plugin-2.0.0a34-py3-none-any.whl", hash = "sha256:fb35297afb6dab552bde8e26c6bce86b6346a14521b3e960db9e198258c198d2"},
+    {file = "stencila_plugin-2.0.0a34.tar.gz", hash = "sha256:04c3aa4803a497c9ddd5233cb2a70e3cb47d1f295dcf7480cf8fb6594bf243be"},
 ]
 
 [[package]]
 name = "stencila-types"
-version = "2.0.0a30"
+version = "2.0.0a31"
 requires_python = ">=3.10"
 summary = "Python types for Stencila"
 groups = ["default"]
@@ -413,8 +399,8 @@ dependencies = [
     "strenum>=0.4.15; python_version < \"3.11\"",
 ]
 files = [
-    {file = "stencila_types-2.0.0a30-py3-none-any.whl", hash = "sha256:cf2ae38eef4d7e8184dce7919a973d76140c95247906384c518aaadfbff12a1e"},
-    {file = "stencila_types-2.0.0a30.tar.gz", hash = "sha256:6fb27d5292ee64c43a2db8d21298e153998a7d9e4187628db64b1f3f546e4494"},
+    {file = "stencila_types-2.0.0a31-py3-none-any.whl", hash = "sha256:e927258a71e4b51c77f831d550d354c5f5f97efc3558c2c9676818dbf0b80bef"},
+    {file = "stencila_types-2.0.0a31.tar.gz", hash = "sha256:60fb410ccf246b25200be25c1030cb1ac9d1b692a64ec08b6e22c5db5c6b7b82"},
 ]
 
 [[package]]
@@ -442,14 +428,14 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.11.0"
+version = "4.12.0"
 requires_python = ">=3.8"
 summary = "Backported and Experimental Type Hints for Python 3.8+"
 groups = ["default"]
 marker = "python_version < \"3.11\""
 files = [
-    {file = "typing_extensions-4.11.0-py3-none-any.whl", hash = "sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a"},
-    {file = "typing_extensions-4.11.0.tar.gz", hash = "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0"},
+    {file = "typing_extensions-4.12.0-py3-none-any.whl", hash = "sha256:b349c66bea9016ac22978d800cfff206d5f9816951f12a7d0ec5578b0a819594"},
+    {file = "typing_extensions-4.12.0.tar.gz", hash = "sha256:8cbcdc8606ebcb0d95453ad7dc5065e6237b6aa230a31e81d0f440c30fed5fd8"},
 ]
 
 [[package]]
