@@ -13,9 +13,7 @@ command = "run_plugin"
 # This should be the name that is return by "get_name" in the Kernel class.
 name = "echo-python"
 
-[[assistants]]
-name = "stencila/echo-python"
-title = "Python Echo Assistant"
-content-format = "markdown"
-system-prompt = true
-models = false
+[[models]]
+id = "stencila/echo-python"
+name = "Python Echo Model"
+description = "A generative model that simply echos the input messages as JSON"

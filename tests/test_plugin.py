@@ -1,5 +1,5 @@
 # from stencila_plugin import structure, unstructure
-from stencila_plugin import GenerateOutput, GenerateTask, structure, unstructure
+from stencila_plugin import ModelOutput, ModelTask, structure, unstructure
 from stencila_plugin.kernel import KernelInstance
 from stencila_plugin.testing import Harness
 from stencila_types import shortcuts as S
@@ -26,7 +26,7 @@ async def test_kernel(harness: Harness):
 
 async def test_assistant(harness: Harness):
     """This will be run multiple times under the different test harnesses."""
-    task = GenerateTask(
+    task = ModelTask(
         instruction=T.InstructionBlock(
             messages=[],
             content=[S.p("hello")],
@@ -48,4 +48,4 @@ async def test_assistant(harness: Harness):
         options={},
         assistant="stencila/echo-python",
     )
-    structure(result, GenerateOutput)
+    structure(result, ModelOutput)

@@ -2,10 +2,9 @@ import asyncio
 from collections.abc import Sequence
 
 from stencila_plugin import (
-    Assistant,
-    GenerateOptions,
-    GenerateOutput,
-    GenerateTask,
+    Model,
+    ModelOutput,
+    ModelTask,
     Kernel,
     Plugin,
 )
@@ -74,58 +73,17 @@ class EchoKernel(Kernel):
         return nodes, messages
 
 
-TEMPLATE = """
-You are an assistant that echos back the task given to you.
-
-This system prompt is a template which is rendered against the
-task itself. Here are some of the parts of the task rendered into
-the system prompt:
-
-Instruction:
-
-{{ instruction | to_yaml }}
-
-Instruction text:
-
-{{ instruction_text }}
-
-Instruction content formatted:
-
-{{ content_formatted if content_formatted else "none" }}
-
-Document context:
-
-{{ context | to_yaml }}
-"""
-
-
-class EchoAssistant(Assistant):
+class EchoModel(Model):
     """
-    A very simple assistant that just echos back the task given to it.
-    We let stencila render a template for the system.
+    A very simple model that just echos back the task given to it.
     """
 
     @classmethod
     def get_name(cls) -> str:
         return "stencila/echo-python"
 
-    async def system_prompt(
-        self, task: GenerateTask, options: GenerateOptions
-    ) -> str | None:
-        return TEMPLATE
-
-    async def perform_task(
-        self, task: GenerateTask, options: GenerateOptions
-    ) -> GenerateOutput:
-        task_json = to_json(task)
-        return GenerateOutput(
-            nodes=[
-                S.h1("Task"),
-                S.cb(task_json, lang="json"),
-                S.h2("System Prompt"),
-                S.cb(task.system_prompt or "", lang="markdown"),
-            ]
-        )
+    async def perform_task(self, task: ModelTask) -> ModelOutput:
+        return ModelOutput(format="json", content=to_json(task), authors=[])
 
 
 def run():
@@ -135,7 +93,7 @@ def run():
     We're using poetry to manage this project, and so you'll find this
     in the `tool.poetry.scripts` section in the `pyproject.toml` file.
     """
-    plugin = Plugin(kernels=[EchoKernel], assistants=[EchoAssistant])
+    plugin = Plugin(kernels=[EchoKernel], models=[EchoModel])
     asyncio.run(plugin.run())
 
 

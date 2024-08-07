@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:8b0819e8e8a95517c727b9d75989dca9c16930a2dbe592364b16dc7f9e57939a"
+content_hash = "sha256:72ec03792a392e4d3b00942e59403ed35ce6d5fbe7dc4ddb8a79a62646eac834"
 
 [[package]]
 name = "aiohttp"
@@ -327,7 +327,7 @@ files = [
 
 [[package]]
 name = "pyright"
-version = "1.1.365"
+version = "1.1.374"
 requires_python = ">=3.7"
 summary = "Command line wrapper for pyright"
 groups = ["dev"]
@@ -335,13 +335,13 @@ dependencies = [
     "nodeenv>=1.6.0",
 ]
 files = [
-    {file = "pyright-1.1.365-py3-none-any.whl", hash = "sha256:194d767a039f9034376b7ec8423841880ac6efdd061f3e283b4ad9fcd484a659"},
-    {file = "pyright-1.1.365.tar.gz", hash = "sha256:d7e69000939aed4bf823707086c30c84c005bdd39fac2dfb370f0e5be16c2ef2"},
+    {file = "pyright-1.1.374-py3-none-any.whl", hash = "sha256:55752bcf7a3646d293cd76710a983b71e16f6128aab2d42468e6eb7e46c0a70d"},
+    {file = "pyright-1.1.374.tar.gz", hash = "sha256:d01b2daf864ba5e0362e56b844984865970d7204158e61eb685e2dab7804cb82"},
 ]
 
 [[package]]
 name = "pytest"
-version = "8.2.1"
+version = "8.3.2"
 requires_python = ">=3.8"
 summary = "pytest: simple powerful testing with Python"
 groups = ["dev"]
@@ -350,17 +350,17 @@ dependencies = [
     "exceptiongroup>=1.0.0rc8; python_version < \"3.11\"",
     "iniconfig",
     "packaging",
-    "pluggy<2.0,>=1.5",
+    "pluggy<2,>=1.5",
     "tomli>=1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pytest-8.2.1-py3-none-any.whl", hash = "sha256:faccc5d332b8c3719f40283d0d44aa5cf101cec36f88cde9ed8f2bc0538612b1"},
-    {file = "pytest-8.2.1.tar.gz", hash = "sha256:5046e5b46d8e4cac199c373041f26be56fdb81eb4e67dc11d4e10811fc3408fd"},
+    {file = "pytest-8.3.2-py3-none-any.whl", hash = "sha256:4ba08f9ae7dcf84ded419494d229b48d0903ea6407b030eaec46df5e6a73bba5"},
+    {file = "pytest-8.3.2.tar.gz", hash = "sha256:c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce"},
 ]
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.23.7"
+version = "0.23.8"
 requires_python = ">=3.8"
 summary = "Pytest support for asyncio"
 groups = ["dev"]
@@ -368,28 +368,28 @@ dependencies = [
     "pytest<9,>=7.0.0",
 ]
 files = [
-    {file = "pytest_asyncio-0.23.7-py3-none-any.whl", hash = "sha256:009b48127fbe44518a547bddd25611551b0e43ccdbf1e67d12479f569832c20b"},
-    {file = "pytest_asyncio-0.23.7.tar.gz", hash = "sha256:5f5c72948f4c49e7db4f29f2521d4031f1c27f86e57b046126654083d4770268"},
+    {file = "pytest_asyncio-0.23.8-py3-none-any.whl", hash = "sha256:50265d892689a5faefb84df80819d1ecef566eb3549cf915dfb33569359d1ce2"},
+    {file = "pytest_asyncio-0.23.8.tar.gz", hash = "sha256:759b10b33a6dc61cce40a8bd5205e302978bbbcc00e279a8b61d9a6a3c82e4d3"},
 ]
 
 [[package]]
 name = "stencila-plugin"
-version = "2.0.0a34"
+version = "2.0.0b3"
 requires_python = ">=3.10"
 summary = "Library for building Stencila Plugins"
 groups = ["default"]
 dependencies = [
     "aiohttp>=3.9.3",
-    "stencila-types==2.0.0a31",
+    "stencila-types==2.0.0b2",
 ]
 files = [
-    {file = "stencila_plugin-2.0.0a34-py3-none-any.whl", hash = "sha256:fb35297afb6dab552bde8e26c6bce86b6346a14521b3e960db9e198258c198d2"},
-    {file = "stencila_plugin-2.0.0a34.tar.gz", hash = "sha256:04c3aa4803a497c9ddd5233cb2a70e3cb47d1f295dcf7480cf8fb6594bf243be"},
+    {file = "stencila_plugin-2.0.0b3-py3-none-any.whl", hash = "sha256:41d8e8e71acc65311c7579a57a782667ca6045d0a0f88573ce3965f6501479b0"},
+    {file = "stencila_plugin-2.0.0b3.tar.gz", hash = "sha256:87c3eef44dd6e2a2248f1ede511e0dfd1e858d361363b9b6bc0f4e68ff6b23f6"},
 ]
 
 [[package]]
 name = "stencila-types"
-version = "2.0.0a31"
+version = "2.0.0b2"
 requires_python = ">=3.10"
 summary = "Python types for Stencila"
 groups = ["default"]
@@ -399,8 +399,8 @@ dependencies = [
     "strenum>=0.4.15; python_version < \"3.11\"",
 ]
 files = [
-    {file = "stencila_types-2.0.0a31-py3-none-any.whl", hash = "sha256:e927258a71e4b51c77f831d550d354c5f5f97efc3558c2c9676818dbf0b80bef"},
-    {file = "stencila_types-2.0.0a31.tar.gz", hash = "sha256:60fb410ccf246b25200be25c1030cb1ac9d1b692a64ec08b6e22c5db5c6b7b82"},
+    {file = "stencila_types-2.0.0b2-py3-none-any.whl", hash = "sha256:8145ae6f06a1bbfc732c9e70552b1b16b87fdc5f7269ef185f68b9fe3958e882"},
+    {file = "stencila_types-2.0.0b2.tar.gz", hash = "sha256:a3f5b7f0e07ebe17f7f3710affe1666ee61110637eb50b319ba91f1d785316fa"},
 ]
 
 [[package]]
